@@ -5,7 +5,7 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 
 const List = (props) => {
 
-    const [list, setList] = useState([{'id': 1, 'titre': 'Les Simpsons', 'synopsis': 'Les Simpson, famille américaine moyenne, vivent à Springfield. Homer, le père, a deux passions : regarder la télé et boire des bières. Mais son quotidien est rarement reposant, entre son fils Bart qui fait toutes les bêtises possibles, sa fille Lisa qui est une surdouée, ou encore sa femme Marge qui ne supporte pas de le voir se soûler à longueur de journée.', 'rating': '78%'}, {'id': 2, 'titre': 'Les Simpsons', 'synopsis': 'Les Simpson, famille américaine moyenne, vivent à Springfield. Homer, le père, a deux passions : regarder la télé et boire des bières. Mais son quotidien est rarement reposant, entre son fils Bart qui fait toutes les bêtises possibles, sa fille Lisa qui est une surdouée, ou encore sa femme Marge qui ne supporte pas de le voir se soûler à longueur de journée.', 'rating': '78%'}])
+    const [list, setList] = useState([{'id': 1, 'titre': 'Les Simpsons', 'actor': 'acteur 1, acteur 2', 'synopsis': 'Les Simpson, famille américaine moyenne, vivent à Springfield. Homer, le père, a deux passions : regarder la télé et boire des bières. Mais son quotidien est rarement reposant, entre son fils Bart qui fait toutes les bêtises possibles, sa fille Lisa qui est une surdouée, ou encore sa femme Marge qui ne supporte pas de le voir se soûler à longueur de journée.', 'rating': '78%'}, {'id': 2, 'titre': 'Les Simpsons', 'actor': 'acteur 1, acteur 2', 'synopsis': 'Les Simpson, famille américaine moyenne, vivent à Springfield. Homer, le père, a deux passions : regarder la télé et boire des bières. Mais son quotidien est rarement reposant, entre son fils Bart qui fait toutes les bêtises possibles, sa fille Lisa qui est une surdouée, ou encore sa femme Marge qui ne supporte pas de le voir se soûler à longueur de journée.', 'rating': '78%'}])
 
     const [modalFilmOpen, setModalFilmOpen] = useState(false)
     const [filmModal, setFilmModal] = useState({})
@@ -32,6 +32,7 @@ const List = (props) => {
             >
                 <Picker.Item label="Les plus populaires" value="trending" />
                 <Picker.Item label="Les mieux notées" value="rating" />
+                <Picker.Item label="Les dernières sorties" value="latest" />
             </Picker>
 
 
@@ -39,6 +40,7 @@ const List = (props) => {
                 <View style={styles.modal}>
                     <Text style={[styles.titreModal, { marginBottom: 20 }]}>{filmModal.titre}</Text>
                     <Text style={{fontSize:15, marginBottom:15}}>{filmModal.synopsis}</Text>
+                    <Text style={{fontSize:15, marginBottom:15}}>Acteurs : {filmModal.actor}</Text>
                     <Text style={{fontSize:15}}>Note : {filmModal.rating}</Text>
                     <TouchableOpacity
                         onPress={() => closeModal()}
