@@ -1,5 +1,7 @@
 import React, {useState} from 'react';
 import { StyleSheet, Text, View, FlatList, Image, TouchableOpacity, Modal } from 'react-native';
+import { Picker } from '@react-native-picker/picker';
+import Ionicons from 'react-native-vector-icons/Ionicons';
 
 const List = (props) => {
 
@@ -7,6 +9,8 @@ const List = (props) => {
 
     const [modalFilmOpen, setModalFilmOpen] = useState(false)
     const [filmModal, setFilmModal] = useState({})
+
+    const [filter, setFilter] = useState("trending")
 
     const openModal = (item) => {
         setFilmModal(item);
@@ -20,6 +24,16 @@ const List = (props) => {
 
     return (
         <View>
+
+            <Picker
+                selectedValue={filter}
+                style={{height: 50}}
+                onValueChange={ (itemValue, itemIndex) => { setFilter(itemValue) } }
+            >
+                <Picker.Item label="Les plus populaires" value="trending" />
+                <Picker.Item label="Les mieux notées" value="rating" />
+            </Picker>
+
 
             <Modal visible={modalFilmOpen} animationType='slide' transparent={true}>
                 <View style={styles.modal}>
@@ -49,11 +63,17 @@ const List = (props) => {
                                     source={{uri:'https://www.themoviedb.org/t/p/w220_and_h330_face/reKFmynUd2VpFToo3rLTGk8zVSN.jpg'}}
                                     style={{ width: 67, height: 100, resizeMode: 'contain' }}
                                 />
-                                <View style={{width:'75%', marginLeft:10, padding:5}}>
+                                <View style={{width:'68%', marginLeft:10, padding:5}}>
                                     <Text numberOfLines={1} style={{fontWeight: 'bold',fontSize:15, marginBottom:5}}>{item.titre}</Text>
                                     <Text numberOfLines={2} style={{fontSize:15, marginBottom:5}}>{item.synopsis}</Text>
                                     <Text style={{fontSize:15}}>Note : {item.rating}</Text>
                                 </View>
+                                <TouchableOpacity
+                                    style={{height:35, marginTop:30}}
+                                    onPress={() => {}}
+                                >
+                                    <Ionicons name="heart-outline" size={35} color="black" />
+                                </TouchableOpacity>
                             </View>
                         </TouchableOpacity>
                     )
@@ -71,7 +91,6 @@ const styles = StyleSheet.create({
         borderWidth: 1,
         marginBottom: 15,
         borderRadius: 5,
-
     },
     titreModal: {
         fontSize: 17,
