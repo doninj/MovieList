@@ -5,6 +5,7 @@ import { Navigation } from './Navigation';
 import {loginStore} from './Store'
 import {SignInScreen} from './Screen/LoginScreen'
 import { createStackNavigator } from '@react-navigation/stack';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 export default function App() {
 
@@ -13,12 +14,13 @@ export default function App() {
 	 React.useEffect(() => {
 		 setTimeout(() => {
 			 setRefresh(!Refresh);
-			 console.log(Refresh)
-		 }, 1000);
+		 }, 100);
 	 }, [Refresh]);
+
     return (
-        <NavigationContainer>
-      {!loginStore.user.isSignedIn ? (
+			<NavigationContainer>
+					{console.log(loginStore.user.reqToken)}
+      {loginStore.user.isSignedIn==false  ? (
 				<Stack.Navigator>
       <Stack.Screen name="SignScreen" component={SignInScreen} />
 			</Stack.Navigator>

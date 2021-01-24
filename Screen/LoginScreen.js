@@ -3,27 +3,45 @@ import { View, Text, TextInput, TouchableOpacity, StyleSheet } from 'react-nativ
 import {loginStore} from '../Store'
 import config from '../config'
 import axios from 'axios';
+import AsyncStorage from '@react-native-async-storage/async-storage';
  const SignInScreen = (props) => {
+	
+	const [Refresh, setRefresh] = React.useState(false);
+	 React.useEffect(() => {
+		 setTimeout(() => {
+			 setRefresh(!Refresh);
+		 }, 100);
+	 }, [Refresh]);
+	
+	 
+	 React.useEffect(() => {
+		getData()
+}, []);
 
-	 
-	 const [password, setpassword] = React.useState("");
-	 const [reqToken, settoken] = React.useState("");
-	 const [username, setusername] = React.useState("");
-	 
-	 
+	 const getData = async () => {
+		try {
+			const jsonValue = await AsyncStorage.getItem('name')
+			console.log(`${jsonValue}`);
+			 jsonValue != null ? loginStore.user=JSON.parse(jsonValue) : null;
+			console.log(loginStore.user)
+		} catch(e) {
+			console.log(e)
+		}
+	}
 const GetRequestToken =() => {
 	 axios.get(`https://api.themoviedb.org/3/authentication/token/new?api_key=${ config.API_KEY }`)
 	 .then(
-		 function (r) {	settoken(r.data.request_token)
-		console.log(reqToken) })
+		 function (r) {	loginStore.user.reqToken = r.data.request_token
+		console.log(loginStore.user.reqToken) })
 	 .catch(err=>console.log(err))
 }
 const GetUserAccount = async (sessionId) => {
 	await axios.get(`https://api.themoviedb.org/3/account?api_key=${ config.API_KEY }&session_id=${ sessionId }`)
 	.then(function (r) {
 		console.log(r)
-		loginStore.user.isSignedIn=true
-		console.log(loginStore.user.isSignedIn)
+		loginStore.isSignedInTrue()
+		console.log("login "+loginStore.user.isSignedIn)
+		storeData()
 	})
 	.catch(err=>console.log(err.status_message))
 }
@@ -36,7 +54,7 @@ const ValidateAuthentication = async (reqToken, username, password) => {
 		console.log(r), 
 		 CreateNewSession(reqToken)}
 	)
-	.catch(err=>console.log(err.status_message))
+	.catch(err=>console.log(err))
 }
 const CreateNewSession = async (reqToken) => {
 	return await axios.post(`https://api.themoviedb.org/3/authentication/session/new?api_key=${ config.API_KEY }`, {
@@ -45,13 +63,23 @@ const CreateNewSession = async (reqToken) => {
 		console.log(r),
 		loginStore.user.session_id= r.data.session_id
 		console.log(loginStore.user.session_id)
+		storeData()
 		GetUserAccount(loginStore.user.session_id)
 	})
 }
+const storeData = async () => {
+	try {
+		await AsyncStorage.setItem('name', JSON.stringify(loginStore.user))
+		console.log("mis en sauvegarde")
+		console.log((loginStore.user))
+	} catch (e) {
+		console.log(e)  
+	}
+}
 const SignIn = async () => {
 		await GetRequestToken()
-		await ValidateAuthentication(reqToken,loginStore.user.username,loginStore.user.password)
-	
+		await ValidateAuthentication(loginStore.user.reqToken,loginStore.user.username,loginStore.user.password)
+		
 }
   return (
     <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>

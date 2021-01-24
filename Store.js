@@ -1,10 +1,11 @@
-import { flow, makeAutoObservable, makeObservable, observable, reaction } from 'mobx';
+import { makeObservable, observable, computed, action } from "mobx"
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 class User {
   username = '';
 	password = '';
 	session_id= '';
+	reqToken= '';
   isSignedIn = false;
 
 	constructor(value){
@@ -18,27 +19,21 @@ class User {
 }
 
 class LoginStore {
-  user = new User();
-  username = '';
+	user = new User();
 
-  signUserInOut = flow(function* (bool) {
-    try {
-      this.user.isSignedIn = bool;
-      yield AsyncStorage.setItem('user', JSON.stringify(this.user));
-    } catch (err) {
-      console.log(err);
-    }
-  }).bind(this);
-
-  constructor() {
-    makeAutoObservable(this);
-    reaction(
-      () => [this.user.username, this.user.password,this.user.session_id],
-      async () => {
-        await AsyncStorage.setItem('user', JSON.stringify(this.user));
-      }
-    );
-  }
+  constructor(value) {
+    makeObservable(this,{
+		user:observable,
+		isSignedInTrue:action,
+		isSignedInFalse:action
+  })
 }
+isSignedInTrue () {
+this.user.isSignedIn=true}
+isSignedInFalse () {
+	user.user.isSignedIn=false
+}
+}
+
 const loginStore = new LoginStore();
 export { loginStore };
