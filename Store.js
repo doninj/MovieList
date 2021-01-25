@@ -28,10 +28,45 @@ class LoginStore {
 		isSignedInFalse:action
   })
 }
+ storeData = async () => {
+	try {
+		await AsyncStorage.setItem('name', JSON.stringify(loginStore.user))
+		console.log("mis en sauvegarde")
+		console.log((loginStore.user))
+	} catch (e) {
+		console.log(e)  
+	}
+}
+ getData = async () => {
+	try {
+		const jsonValue = await AsyncStorage.getItem('name')
+		console.log(`${jsonValue}`);
+		 jsonValue != null ? loginStore.user=JSON.parse(jsonValue) : null;
+		console.log(loginStore.user)
+	} catch(e) {
+		console.log(e)
+	}
+}
 isSignedInTrue () {
-this.user.isSignedIn=true}
+this.user.isSignedIn=true
+this.storeData()
+}
 isSignedInFalse () {
-	user.user.isSignedIn=false
+	this.user.password=""
+	this.user.reqToken=""
+	this.user.session_id=""
+	this.user.username=""
+	this.user.isSignedIn=false
+	this.removeItemValue("name")
+}
+async removeItemValue(key) {
+	try {
+			await AsyncStorage.removeItem(key);
+			return true;
+	}
+	catch(exception) {
+			return false;
+	}
 }
 }
 

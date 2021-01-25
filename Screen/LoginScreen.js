@@ -7,6 +7,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
  const SignInScreen = (props) => {
 	
 	const [Refresh, setRefresh] = React.useState(false);
+	const [error, seterror] = React.useState(false);
 	 React.useEffect(() => {
 		 setTimeout(() => {
 			 setRefresh(!Refresh);
@@ -15,19 +16,9 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 	
 	 
 	 React.useEffect(() => {
-		getData()
+		loginStore.getData()
 }, []);
 
-	 const getData = async () => {
-		try {
-			const jsonValue = await AsyncStorage.getItem('name')
-			console.log(`${jsonValue}`);
-			 jsonValue != null ? loginStore.user=JSON.parse(jsonValue) : null;
-			console.log(loginStore.user)
-		} catch(e) {
-			console.log(e)
-		}
-	}
 const GetRequestToken =() => {
 	 axios.get(`https://api.themoviedb.org/3/authentication/token/new?api_key=${ config.API_KEY }`)
 	 .then(
@@ -40,8 +31,6 @@ const GetUserAccount = async (sessionId) => {
 	.then(function (r) {
 		console.log(r)
 		loginStore.isSignedInTrue()
-		console.log("login "+loginStore.user.isSignedIn)
-		storeData()
 	})
 	.catch(err=>console.log(err.status_message))
 }
@@ -52,9 +41,14 @@ const ValidateAuthentication = async (reqToken, username, password) => {
 			password: password
 	}).then(function (r) {
 		console.log(r), 
-		 CreateNewSession(reqToken)}
+		CreateNewSession(reqToken)}
 	)
-	.catch(err=>console.log(err))
+	.catch(function (err) {console.log(err)
+		seterror(true)
+	}
+	)}
+const DisplayError = () =>{
+	return error ? <Text> Mot de passe ou indentifiant incorrect</Text> : null
 }
 const CreateNewSession = async (reqToken) => {
 	return await axios.post(`https://api.themoviedb.org/3/authentication/session/new?api_key=${ config.API_KEY }`, {
@@ -63,19 +57,10 @@ const CreateNewSession = async (reqToken) => {
 		console.log(r),
 		loginStore.user.session_id= r.data.session_id
 		console.log(loginStore.user.session_id)
-		storeData()
 		GetUserAccount(loginStore.user.session_id)
 	})
 }
-const storeData = async () => {
-	try {
-		await AsyncStorage.setItem('name', JSON.stringify(loginStore.user))
-		console.log("mis en sauvegarde")
-		console.log((loginStore.user))
-	} catch (e) {
-		console.log(e)  
-	}
-}
+
 const SignIn = async () => {
 		await GetRequestToken()
 		await ValidateAuthentication(loginStore.user.reqToken,loginStore.user.username,loginStore.user.password)
@@ -90,6 +75,7 @@ const SignIn = async () => {
         style={{ ...styles.input, backgroundColor: 'skyblue', borderWidth: 0 }}>
         <Text style={{ color: 'white', fontWeight: 'bold' }}>Se connecter</Text>
       </TouchableOpacity>
+			<View>{DisplayError()}</View>
     </View>
   );
 };

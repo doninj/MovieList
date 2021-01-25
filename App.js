@@ -19,7 +19,6 @@ export default function App() {
 
     return (
 			<NavigationContainer>
-					{console.log(loginStore.user.reqToken)}
       {loginStore.user.isSignedIn==false  ? (
 				<Stack.Navigator>
       <Stack.Screen name="SignScreen" component={SignInScreen} />
