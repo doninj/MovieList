@@ -1,76 +1,36 @@
 import React, {useState} from 'react';
-import {StyleSheet,Text,	View,FlatList,TouchableOpacity,Image} from 'react-native';
+import {StyleSheet,Text,ScrollView,	View,FlatList,TouchableOpacity,Image} from 'react-native';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import {loginStore} from './Store';
 import axios from 'axios';
 import config from './config'
+import { useIsFocused } from '@react-navigation/native';
+import { Picker } from '@react-native-picker/picker';
 
 const Account = (props) => {
-	React.useEffect(() => {
-    GetUserAccount(loginStore.user.session_id)
-  },[]);
-	const [userDetails, setuserDetails] = useState([]);
-	const [fav, setFav] = useState({
-		"page": 1,
-		"results": [{
-				"adult": false,
-				"backdrop_path": null,
-				"genre_ids": [
-					16
-				],
-				"id": 1,
-				"original_language": "en",
-				"original_title": "The Incredibles",
-				"overview": "Bob Parr has given up his superhero days to log in time as an insurance adjuster and raise his three children with his formerly heroic wife in suburbia. But when he receives a mysterious assignment, it's time to get back into costume.",
-				"release_date": "2004-11-04",
-				"poster_path": null,
-				"popularity": 0.167525,
-				"title": "The Incredibles",
-				"video": false,
-				"vote_average": 6.8,
-				"vote_count": 1584
-			},
-			{
-				"adult": false,
-				"backdrop_path": null,
-				"genre_ids": [
-					16
-				],
-				"id": 2,
-				"original_language": "en",
-				"original_title": "The Incredibles 2",
-				"overview": "Bob Parr has given up his superhero days to log in time as an insurance adjuster and raise his three children with his formerly heroic wife in suburbia. But when he receives a mysterious assignment, it's time to get back into costume.",
-				"release_date": "2004-11-04",
-				"poster_path": null,
-				"popularity": 0.167525,
-				"title": "The Incredibles",
-				"video": false,
-				"vote_average": 6.8,
-				"vote_count": 1584
-			},
-			{
-				"adult": false,
-				"backdrop_path": null,
-				"genre_ids": [
-					16
-				],
-				"id": 3,
-				"original_language": "en",
-				"original_title": "The Incredibles 3",
-				"overview": "Bob Parr has given up his superhero days to log in time as an insurance adjuster and raise his three children with his formerly heroic wife in suburbia. But when he receives a mysterious assignment, it's time to get back into costume.",
-				"release_date": "2004-11-04",
-				"poster_path": null,
-				"popularity": 0.167525,
-				"title": "The Incredibles",
-				"video": false,
-				"vote_average": 6.8,
-				"vote_count": 1584
-			}
-		],
-		"total_pages": 4,
-		"total_results": 77
-	})
+	const isFocused = useIsFocused();
+	const [filter, setFilter] = useState("movies")
 
+
+	React.useEffect(() => {
+		GetUserAccount(loginStore.user.session_id)
+		axios.get(`https://api.themoviedb.org/3/account/${loginStore.user.account_id}/favorite/${filter}?api_key=${config.API_KEY}&session_id=${loginStore.user.session_id}&language=fr-FR&sort_by=created_at.asc&page=1`)
+	.then(function (r){
+		setFav(r.data.results)
+	console.log("fav: "+ fav)
+	})
+  },[fav,filter]);
+	const [userDetails, setuserDetails] = useState([]);
+	const [fav, setFav] = useState(undefined)
+	const [Refresh, setRefresh] = React.useState(false);
+
+
+	React.useEffect(() => {
+		setTimeout(() => {
+			setRefresh(!Refresh);
+		}, 1000);
+
+	}, [Refresh]);
 	const GetUserAccount = async (sessionId) => {
 		await axios.get(`https://api.themoviedb.org/3/account?api_key=${ config.API_KEY }&session_id=${ sessionId }`)
 		.then(function (r) {
@@ -79,9 +39,9 @@ const Account = (props) => {
 		})
 		.catch(err=>console.log(err.status_message))
 	}
-
+	
 	return (
-		<View>
+		<ScrollView>
 				<View>
 						<Text>Nom :{userDetails.username} </Text>
 						<TouchableOpacity
@@ -92,8 +52,17 @@ const Account = (props) => {
 						</TouchableOpacity>
 				</View>
 				<Text style={{borderTopColor: 'grey', borderTopWidth: 1, marginTop:'50%', fontSize:17, textAlign: 'center'}}>Mes favoris</Text>
+				<Picker
+                selectedValue={filter}
+                style={{height: 50}}
+                onValueChange={ (itemValue, itemIndex) => { setFilter(itemValue) } }
+            >
+                <Picker.Item label="Films favories" value="movies" />
+                <Picker.Item label="Séries TV favorites" value="tv" />
+            </Picker>
+				<ScrollView>
 				<FlatList
-						data={fav.results}
+						data={fav}
 						style={{marginTop:10}}
 						renderItem={({ item }) => {
 								return (
@@ -113,7 +82,8 @@ const Account = (props) => {
 						}}
 						keyExtractor={item => item.id.toString()}
 				/>
-		</View>
+				</ScrollView>
+		</ScrollView>
 );
 }
 

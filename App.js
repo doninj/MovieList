@@ -6,6 +6,7 @@ import {loginStore} from './Store'
 import {SignInScreen} from './Screen/LoginScreen'
 import { createStackNavigator } from '@react-navigation/stack';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { useIsFocused } from '@react-navigation/native';
 
 export default function App() {
 

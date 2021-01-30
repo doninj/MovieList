@@ -4,11 +4,16 @@ import {loginStore} from '../Store'
 import config from '../config'
 import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { useIsFocused } from '@react-navigation/native';
+
  const SignInScreen = (props) => {
-	
+	const isFocused = useIsFocused();
+
 	const [Refresh, setRefresh] = React.useState(false);
 	const [error, seterror] = React.useState(false);
-	
+	React.useEffect(() => {
+		setRefresh(!Refresh)
+}, [isFocused]);
 	 
 	 React.useEffect(() => {
 		loginStore.getData()
