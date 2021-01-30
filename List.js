@@ -1,17 +1,21 @@
 import React, {useState} from 'react';
-import { StyleSheet, Text, View, FlatList, Image, TouchableOpacity, Modal } from 'react-native';
+import { StyleSheet, Text, View,ScrollView, FlatList, Image, TouchableOpacity, Modal } from 'react-native';
 import { Picker } from '@react-native-picker/picker';
 import Ionicons from 'react-native-vector-icons/Ionicons';
+import config from './config'
+import axios from 'axios';
+import { loginStore } from './Store';
 
 const List = (props) => {
 
-    const [list, setList] = useState([{'id': 1, 'titre': 'Les Simpsons', 'actor': 'acteur 1, acteur 2', 'synopsis': 'Les Simpson, famille américaine moyenne, vivent à Springfield. Homer, le père, a deux passions : regarder la télé et boire des bières. Mais son quotidien est rarement reposant, entre son fils Bart qui fait toutes les bêtises possibles, sa fille Lisa qui est une surdouée, ou encore sa femme Marge qui ne supporte pas de le voir se soûler à longueur de journée.', 'rating': '78%'}, {'id': 2, 'titre': 'Les Simpsons', 'actor': 'acteur 1, acteur 2', 'synopsis': 'Les Simpson, famille américaine moyenne, vivent à Springfield. Homer, le père, a deux passions : regarder la télé et boire des bières. Mais son quotidien est rarement reposant, entre son fils Bart qui fait toutes les bêtises possibles, sa fille Lisa qui est une surdouée, ou encore sa femme Marge qui ne supporte pas de le voir se soûler à longueur de journée.', 'rating': '78%'}])
-
+    const [list, setList] = useState([])
+		const [Refresh, setRefresh] = React.useState(false);
+		
     const [modalFilmOpen, setModalFilmOpen] = useState(false)
     const [filmModal, setFilmModal] = useState({})
-
-    const [filter, setFilter] = useState("trending")
-
+		const [listFilm, setlistFilm] = useState({});
+		const [filter, setFilter] = useState("trending")
+	
     const openModal = (item) => {
         setFilmModal(item);
         setModalFilmOpen(true);
@@ -23,7 +27,7 @@ const List = (props) => {
     }
 
     return (
-        <View>
+        <ScrollView>
 
             <Picker
                 selectedValue={filter}
@@ -38,10 +42,10 @@ const List = (props) => {
 
             <Modal visible={modalFilmOpen} animationType='slide' transparent={true}>
                 <View style={styles.modal}>
-                    <Text style={[styles.titreModal, { marginBottom: 20 }]}>{filmModal.titre}</Text>
-                    <Text style={{fontSize:15, marginBottom:15}}>{filmModal.synopsis}</Text>
-                    <Text style={{fontSize:15, marginBottom:15}}>Acteurs : {filmModal.actor}</Text>
-                    <Text style={{fontSize:15}}>Note : {filmModal.rating}</Text>
+                    <Text style={[styles.titreModal, { marginBottom: 20 }]}>{filmModal.title}  </Text>
+                    <Text style={{fontSize:15, marginBottom:15}}>{filmModal.synopsis}  </Text>
+                    <Text style={{fontSize:15, marginBottom:15}}>Acteurs : {filmModal.actor}  </Text>
+                    <Text style={{fontSize:15}}>Note : {filmModal.vote_average}</Text>
                     <TouchableOpacity
                         onPress={() => closeModal()}
                         style={styles.buttonClose}
@@ -53,7 +57,7 @@ const List = (props) => {
 
 
             <FlatList
-                data={list}
+                data={loginStore.list}
                 renderItem={({ item }) => {
                     return (
                         <TouchableOpacity
@@ -62,13 +66,13 @@ const List = (props) => {
                         >
                             <View style={{flexDirection:'row'}}>
                                 <Image
-                                    source={{uri:'https://www.themoviedb.org/t/p/w220_and_h330_face/reKFmynUd2VpFToo3rLTGk8zVSN.jpg'}}
+                                    source={{uri:`https://image.tmdb.org/t/p/original/${ item.poster_path}`}}
                                     style={{ width: 67, height: 100, resizeMode: 'contain' }}
                                 />
                                 <View style={{width:'68%', marginLeft:10, padding:5}}>
-                                    <Text numberOfLines={1} style={{fontWeight: 'bold',fontSize:15, marginBottom:5}}>{item.titre}</Text>
-                                    <Text numberOfLines={2} style={{fontSize:15, marginBottom:5}}>{item.synopsis}</Text>
-                                    <Text style={{fontSize:15}}>Note : {item.rating}</Text>
+                                    <Text numberOfLines={1} style={{fontWeight: 'bold',fontSize:15, marginBottom:5}}>{item.original_title}</Text>
+                                    <Text numberOfLines={2} style={{fontSize:15, marginBottom:5}}>{item.overview}</Text>
+                                    <Text style={{fontSize:15}}>Note : {item.vote_average}</Text>
                                 </View>
                                 <TouchableOpacity
                                     style={{height:35, marginTop:30}}
@@ -84,7 +88,7 @@ const List = (props) => {
             />
 
 
-        </View>
+        </ScrollView>
     );
 }
 

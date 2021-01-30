@@ -2,27 +2,29 @@ import { makeObservable, observable, computed, action } from "mobx"
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 class User {
-  username = '';
-	password = '';
-	session_id= '';
-	reqToken= '';
-  isSignedIn = false;
+  username = ''
+	password = ''
+	session_id = ''
+	reqToken = ''
+	account_id = ''
+  isSignedIn = false
 
 	constructor(value){
   makeObservable(this, {
 		username: observable,
 		password: observable,
-		session_id:observable,
-		isSignedIn:observable
+		session_id: observable,
+		isSignedIn: observable
 })
 	}
 }
 
 class LoginStore {
 	user = new User();
-
+	list= []
   constructor(value) {
     makeObservable(this,{
+		list : observable,
 		user:observable,
 		isSignedInTrue:action,
 		isSignedInFalse:action
@@ -52,11 +54,12 @@ this.user.isSignedIn=true
 this.storeData()
 }
 isSignedInFalse () {
-	this.user.password=""
-	this.user.reqToken=""
-	this.user.session_id=""
-	this.user.username=""
-	this.user.isSignedIn=false
+	this.user.password = ''
+	this.user.reqToken = ''
+	this.user.session_id = ''
+	this.user.username = ''
+	this.user.account_id = ''
+	this.user.isSignedIn = false
 	this.removeItemValue("name")
 }
 async removeItemValue(key) {

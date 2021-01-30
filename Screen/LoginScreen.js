@@ -8,11 +8,6 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 	
 	const [Refresh, setRefresh] = React.useState(false);
 	const [error, seterror] = React.useState(false);
-	 React.useEffect(() => {
-		 setTimeout(() => {
-			 setRefresh(!Refresh);
-		 }, 100);
-	 }, [Refresh]);
 	
 	 
 	 React.useEffect(() => {
@@ -29,7 +24,8 @@ const GetRequestToken =() => {
 const GetUserAccount = async (sessionId) => {
 	await axios.get(`https://api.themoviedb.org/3/account?api_key=${ config.API_KEY }&session_id=${ sessionId }`)
 	.then(function (r) {
-		console.log(r)
+		console.log(r.data)
+		loginStore.user.account_id= r.data.id;
 		loginStore.isSignedInTrue()
 	})
 	.catch(err=>console.log(err.status_message))
