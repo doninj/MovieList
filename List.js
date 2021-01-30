@@ -10,11 +10,21 @@ const List = (props) => {
 
     const [list, setList] = useState([])
 		const [Refresh, setRefresh] = React.useState(false);
-		
+
+		React.useEffect(() => {
+			setTimeout(() => {
+				setRefresh(!Refresh);
+			}, 100);
+		}, [Refresh]);
+		React.useEffect(() => {
+			axios.get(`${config.URL_BACK}movie/${filter}?api_key=${config.API_KEY}`)
+			.then(r => loginStore.list= r.data.results)
+			.catch(e => console.log(e))
+		}, [loginStore.list]);
     const [modalFilmOpen, setModalFilmOpen] = useState(false)
     const [filmModal, setFilmModal] = useState({})
 		const [listFilm, setlistFilm] = useState({});
-		const [filter, setFilter] = useState("trending")
+		const [filter, setFilter] = useState("popular")
 	
     const openModal = (item) => {
         setFilmModal(item);
@@ -34,9 +44,9 @@ const List = (props) => {
                 style={{height: 50}}
                 onValueChange={ (itemValue, itemIndex) => { setFilter(itemValue) } }
             >
-                <Picker.Item label="Les plus populaires" value="trending" />
-                <Picker.Item label="Les mieux notées" value="rating" />
-                <Picker.Item label="Les dernières sorties" value="latest" />
+                <Picker.Item label="Les plus populaires" value="popular" />
+                <Picker.Item label="Les mieux notées" value="top_rated" />
+                <Picker.Item label="Les dernières sorties" value="now_playing" />
             </Picker>
 
 
