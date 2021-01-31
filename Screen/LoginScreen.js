@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Text, TextInput, TouchableOpacity, StyleSheet } from 'react-native';
+import { View, Text, Image,TextInput, TouchableOpacity, StyleSheet } from 'react-native';
 import {loginStore} from '../Store'
 import config from '../config'
 import axios from 'axios';
@@ -68,12 +68,17 @@ const SignIn = async () => {
 		
 }
   return (
-    <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
+    <View style={{ backgroundColor:"#bd8cbf",flex: 1, alignItems: 'center'  }}>
+		 <Image 
+         source={require("../movie.png")}
+         style={{ width: 400, height: 200,marginTop:50,marginBottom:20 }}
+         />
+				 <Text style={{ marginBottom:50,bottom:0,fontSize:50 }}>MovieList</Text>
       <TextInput placeholder="username" style={styles.input} onChangeText={(value) =>(loginStore.user.username=value)} />
       <TextInput placeholder="password" style={styles.input} onChangeText={(value) => (loginStore.user.password=value)} />
       <TouchableOpacity
         onPress={() => SignIn()}
-        style={{ ...styles.input, backgroundColor: 'skyblue', borderWidth: 0 }}>
+        style={{ ...styles.input, backgroundColor: 'skyblue', borderWidth: 0,textAlign:"center" }}>
         <Text style={{ color: 'white', fontWeight: 'bold' }}>Se connecter</Text>
       </TouchableOpacity>
 			<View>{DisplayError()}</View>
@@ -83,13 +88,15 @@ const SignIn = async () => {
 
 const styles = StyleSheet.create({
   input: {
-    height: 40,
+		backgroundColor:"white",
+		height: 40,
     borderWidth: 0.5,
     padding: 10,
     borderRadius: 8,
     marginVertical: 3,
     // marginHorizontal: 10,
-    width: '95%',
+		width: '95%',
+		elevation:10
   },
 });
 
