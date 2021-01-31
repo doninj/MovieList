@@ -36,14 +36,14 @@ Dans la page de login, il est possible:
 * _Avoir une liste de films et de series avec des filtres._
 * _Avoir un détails d'un film._
 * _Filtrer selon les plus populaire,les mieux notés,les dernières sorties._
-* _Mettre en favorie un film/serie
+* _Mettre en favorie un film/serie_
 ### Page de profil:
 <div flex="1">
 <img src="./imagesDocumentation/Account.jpg" height="300px">
 </div>
 
 * _Avoir son nom d'utilisateur_
-* _ Avoir sa liste de favorie/serie
+* _ Avoir sa liste de favorie/serie_
 
 
   
