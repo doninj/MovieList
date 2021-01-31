@@ -1,7 +1,7 @@
 # Application Mobile MovieList
 Cette application mobile permet d'avoir une liste de films/series basé sur The Movie DB.
 <div>
-<img src="./imagesDocumentation/liste_tâches.jpg" height="300px">
+<img src="./imagesDocumentation/listFlim.jpg" height="300px">
 </div>
 ## Installation de l'application:
 
