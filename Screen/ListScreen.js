@@ -8,8 +8,6 @@ import config from '../config'
 const ListScreen = (props) => {
 
 	const [listFilm, setlistFilm] = React.useState("");
-
-
     return (
         <View style={styles.container}>
             <Text style={styles.titrePage}>Liste des films</Text>

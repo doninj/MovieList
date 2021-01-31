@@ -7,9 +7,10 @@ import axios from 'axios';
 import { loginStore } from './Store';
 import { useIsFocused } from '@react-navigation/native';
 import ProgressCircle from 'react-native-progress-circle'
+import { NavigationContainer } from '@react-navigation/native';
 
 
-const List = (props) => {
+const List = (props,{navigation}) => {
 
     const [list, setList] = useState([])
 		const [Refresh, setRefresh] = React.useState(false);
@@ -19,23 +20,29 @@ const List = (props) => {
 		const [listFilm, setlistFilm] = useState({});
 		const [filter, setFilter] = useState("popular")
 		const [filter2, setFilter2] = useState("movie")
+		const [actor, setactor] = useState([]);
 	
 		React.useEffect(() => {
-			axios.get(`${config.URL_BACK}${filter2}/${filter}?api_key=${config.API_KEY}`)
+			axios.get(`${config.URL_BACK}${filter2}/${filter}?api_key=${config.API_KEY}&language=fr-FR`)
 			.then(r => loginStore.list= r.data.results)
 			.catch(e => console.log(e))
-		}, [loginStore.list,filter2]);
+		}, [loginStore.list,filter2,filter,actor]);
 
 		React.useEffect(() => {
 			setTimeout(() => {
 				setRefresh(!Refresh);
-			}, 1000);
-		}, [Refresh]);
-
+			}, 100);
+		}, [Refresh,actor]);
 
     const openModal = (item) => {
+				/* axios.get(`https://api.themoviedb.org/3/movie/550/credits?api_key=a30ed87e9e7dd302b15f16dfd11d7aa7&language=en-US`)
+				.then(function (r){ for (let index = 0; index < array.length; index++) {
+					const element = array[index];
+				})
+				.catch(e=> console.log(e)) */
         setFilmModal(item);
-        setModalFilmOpen(true);
+				setModalFilmOpen(true);
+				
     }
 
     const closeModal = () => {
@@ -102,15 +109,27 @@ const List = (props) => {
     return (
         <ScrollView>
 
+					{filter2=="tv"  ? (
             <Picker
                 selectedValue={filter}
                 style={{height: 50}}
                 onValueChange={ (itemValue, itemIndex) => { setFilter(itemValue) } }
             >
+							
                 <Picker.Item label="Les plus populaires" value="popular" />
                 <Picker.Item label="Les mieux notées" value="top_rated" />
-                <Picker.Item label="Les dernières sorties" value="now_playing" />
+                <Picker.Item label="Actuellement diffusées" value="on_the_air" />
             </Picker>
+					):(<Picker
+						selectedValue={filter}
+						style={{height: 50}}
+						onValueChange={ (itemValue, itemIndex) => { setFilter(itemValue) } }
+				>
+					
+						<Picker.Item label="Les plus populaires" value="popular" />
+						<Picker.Item label="Les mieux notées" value="top_rated" />
+						<Picker.Item label="Les dernières sorties" value="now_playing" />
+				</Picker>)}
 
             <Picker
                 selectedValue={filter2}
@@ -127,15 +146,19 @@ const List = (props) => {
 											source={{uri:`https://image.tmdb.org/t/p/original/${ filmModal.backdrop_path}`}}
 											style={{ width: 1000, height: 200, overflow: 'hidden', borderRadius: 25,resizeMode: 'contain' }}/>
 
-                    <Text style={[styles.titreModal, { marginBottom: 20 }]}>  {filmModal.original_title}    </Text>
-                    <Text style={{fontSize:15, marginBottom:15}}>{filmModal.synopsis}  </Text>
-                    <Text style={{fontSize:15, marginBottom:15}}>Acteurs : {filmModal.actor}  </Text>
-									{ProgressBar(filmModal.vote_average)}
+{filter2=="tv"  ? (
+                                <Text  style={{fontWeight: 'bold',fontSize:15, marginBottom:5}}>  {filmModal.name}  </Text>
+																):(<Text  style={{fontWeight: 'bold',fontSize:15, marginBottom:5}}>  {filmModal.original_title}  </Text> )}
+                    <Text style={{fontSize:15, marginLeft:10, marginBottom:15}}>{filmModal.overview}  </Text>
+                   {/*  <Text style={{fontSize:15, marginBottom:15}}>Acteurs : {actor.forEach(element => {
+										 console.log(element.name)
+										})}  </Text> */}
+									{ ProgressBar(filmModal.vote_average)}
                     <TouchableOpacity
                         onPress={() => closeModal()}
                         style={styles.buttonClose}
                     >
-                        <Text style={{fontSize: 15}}>Fermer</Text>
+                        <Text style={{fontSize: 15,color:"white"}}>Fermer</Text>
                     </TouchableOpacity>
                 </View>
             </Modal>
@@ -153,10 +176,18 @@ const List = (props) => {
                             <View style={{flexDirection:'row'}}>
                                 <Image
                                     source={{uri:`https://image.tmdb.org/t/p/original/${ item.poster_path}`}}
-                                    style={{ width: 67, height: 100, resizeMode: 'contain' }}
+                                    style={{ width: 67, height: 150 }}
                                 />
+
                                 <View style={{width:'68%', marginLeft:10, padding:5}}>
-                                    <Text numberOfLines={1} style={{fontWeight: 'bold',fontSize:15, marginBottom:5}}>{item.original_title}</Text>
+																{filter2=="tv"  ? (
+                                    <Text numberOfLines={1} style={{fontWeight: 'bold',fontSize:15, marginBottom:5}}>{item.name}</Text>
+																):(<Text numberOfLines={1} style={{fontWeight: 'bold',fontSize:15, marginBottom:5}}>{item.original_title}</Text> )}
+																{filter2=="tv"  ? (
+																  <Text numberOfLines={1} style={{fontWeight: 'bold',fontSize:15, marginBottom:5}}>{item.first_air_date}</Text>):(
+																		<Text numberOfLines={1} style={{fontWeight: 'bold',fontSize:15, marginBottom:5}}>{item.release_date}</Text>
+																	)}
+
                                     <Text numberOfLines={2} style={{fontSize:15, marginBottom:5}}>{item.overview}</Text>
                                     <Text style={{fontSize:15}}>Note : {item.vote_average}</Text>
                                 </View>
@@ -189,10 +220,14 @@ const styles = StyleSheet.create({
         fontWeight: 'bold',
     },
     buttonClose: {
-        backgroundColor: "lightgrey",
-        borderRadius: 12,
+        backgroundColor: "#db0000",
+				borderRadius: 12,
+				width:100,
         padding: 10,
-        marginTop: 20,
+				marginTop: 20,
+				alignItems: "center",
+				marginBottom:20,
+
     },
     modal: {
         margin: 29,

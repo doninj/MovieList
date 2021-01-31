@@ -7,7 +7,7 @@ import config from './config'
 import { useIsFocused } from '@react-navigation/native';
 import { Picker } from '@react-native-picker/picker';
 
-const Account = (props) => {
+const Account = (props,navigation) => {
 	const isFocused = useIsFocused();
 	const [filter, setFilter] = useState("movies")
 
@@ -19,7 +19,7 @@ const Account = (props) => {
 		setFav(r.data.results)
 	console.log("fav: "+ fav)
 	})
-  },[fav,filter]);
+  },[fav,filter,isFocused]);
 	const [userDetails, setuserDetails] = useState([]);
 	const [fav, setFav] = useState(undefined)
 	const [Refresh, setRefresh] = React.useState(false);
@@ -43,7 +43,8 @@ const Account = (props) => {
 	return (
 		<ScrollView>
 				<View>
-						<Text>Nom :{userDetails.username} </Text>
+						<Text style={{ fontSize:30,textAlign:"center" }}>Nom : </Text>
+						<Text style={{ fontSize:30,textAlign:"center" }}> {userDetails.username} </Text>
 						<TouchableOpacity
 								style={{backgroundColor:'#EA2027', borderRadius:5, padding:10}}
 								onPress={() => loginStore.isSignedInFalse()}
@@ -51,7 +52,7 @@ const Account = (props) => {
 								<Text style={{fontSize: 15, color: 'white', textAlign: 'center'}}>Se déconnecter</Text>
 						</TouchableOpacity>
 				</View>
-				<Text style={{borderTopColor: 'grey', borderTopWidth: 1, marginTop:'50%', fontSize:17, textAlign: 'center'}}>Mes favoris</Text>
+				<Text style={{borderTopColor: 'grey', borderTopWidth: 1, marginTop:'10%', fontSize:17, textAlign: 'center'}}>Mes favoris</Text>
 				<Picker
                 selectedValue={filter}
                 style={{height: 50}}
@@ -68,7 +69,9 @@ const Account = (props) => {
 								return (
 										<View style={{flexDirection:'row', borderWidth: 1, marginBottom: 15, borderRadius: 5}}>
 												<View style={{width:'85%', marginLeft:10, padding:5}}>
-														<Text numberOfLines={1} style={{fontWeight: 'bold',fontSize:15, marginBottom:5}}>{item.original_title}</Text>
+												{filter=="tv"  ? (
+														<Text numberOfLines={1} style={{fontWeight: 'bold',fontSize:15, marginBottom:5}}>{item.name}</Text>
+												):(	<Text numberOfLines={1} style={{fontWeight: 'bold',fontSize:15, marginBottom:5}}>{item.original_title}</Text>)}
 														<Text numberOfLines={2} style={{fontSize:15, marginBottom:5}}>{item.overview}</Text>
 												</View>
 												<TouchableOpacity

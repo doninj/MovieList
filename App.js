@@ -22,9 +22,10 @@ export default function App() {
 			<NavigationContainer>
       {loginStore.user.isSignedIn==false  ? (
 				<Stack.Navigator>
-      <Stack.Screen name="SignScreen" component={SignInScreen} />
+      <Stack.Screen name="Se connecter" component={SignInScreen} />
 			</Stack.Navigator>
-			):(   <Navigation />)}
+			):(   <Navigation />
+			)}
         </NavigationContainer>
     );
 }
