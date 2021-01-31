@@ -27,6 +27,7 @@
     },
     "web": {
       "favicon": "./assets/favicon.png"
-    }
+    },
+    "description": "Fait par Léo Rouillard et Jean-baptiste Donin"
   }
 }
