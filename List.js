@@ -95,7 +95,7 @@ const List = (props,{navigation}) => {
 				"media_type":media_type,
 				"media_id": item_id,
   			"favorite": true
-			}).then(r => console.log(r))
+			})
 			.catch(e => console.log(e))
 			}
 			const containsId =(item_id) =>
@@ -164,7 +164,6 @@ const List = (props,{navigation}) => {
             </Modal>
 
 
-						{console.log(loginStore.list)}
             <FlatList
                 data={loginStore.list}
                 renderItem={({ item }) => {

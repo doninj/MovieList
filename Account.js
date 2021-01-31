@@ -17,7 +17,6 @@ const Account = (props,navigation) => {
 		axios.get(`https://api.themoviedb.org/3/account/${loginStore.user.account_id}/favorite/${filter}?api_key=${config.API_KEY}&session_id=${loginStore.user.session_id}&language=fr-FR&sort_by=created_at.asc&page=1`)
 	.then(function (r){
 		setFav(r.data.results)
-	console.log("fav: "+ fav)
 	})
   },[fav,filter,isFocused]);
 	const [userDetails, setuserDetails] = useState([]);
@@ -34,7 +33,6 @@ const Account = (props,navigation) => {
 	const GetUserAccount = async (sessionId) => {
 		await axios.get(`https://api.themoviedb.org/3/account?api_key=${ config.API_KEY }&session_id=${ sessionId }`)
 		.then(function (r) {
-			console.log(r)
 			setuserDetails(r.data)
 		})
 		.catch(err=>console.log(err.status_message))

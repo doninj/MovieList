@@ -23,13 +23,13 @@ const GetRequestToken =() => {
 	 axios.get(`https://api.themoviedb.org/3/authentication/token/new?api_key=${ config.API_KEY }`)
 	 .then(
 		 function (r) {	loginStore.user.reqToken = r.data.request_token
-		console.log(loginStore.user.reqToken) })
+		 })
 	 .catch(err=>console.log(err))
 }
 const GetUserAccount = async (sessionId) => {
 	await axios.get(`https://api.themoviedb.org/3/account?api_key=${ config.API_KEY }&session_id=${ sessionId }`)
 	.then(function (r) {
-		console.log(r.data)
+	
 		loginStore.user.account_id= r.data.id;
 		loginStore.isSignedInTrue()
 	})
@@ -41,7 +41,6 @@ const ValidateAuthentication = async (reqToken, username, password) => {
 			username: username,
 			password: password
 	}).then(function (r) {
-		console.log(r), 
 		CreateNewSession(reqToken)}
 	)
 	.catch(function (err) {console.log(err)
@@ -55,9 +54,7 @@ const CreateNewSession = async (reqToken) => {
 	return await axios.post(`https://api.themoviedb.org/3/authentication/session/new?api_key=${ config.API_KEY }`, {
 			request_token: reqToken
 	}).then(function (r) {
-		console.log(r),
 		loginStore.user.session_id= r.data.session_id
-		console.log(loginStore.user.session_id)
 		GetUserAccount(loginStore.user.session_id)
 	})
 }
