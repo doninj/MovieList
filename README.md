@@ -43,7 +43,7 @@ Dans la page de login, il est possible:
 </div>
 
 * _Avoir son nom d'utilisateur_
-* _ Avoir sa liste de favorie/serie_
+* _Avoir sa liste de favorie/serie_
 
 
   
