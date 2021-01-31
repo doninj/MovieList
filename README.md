@@ -14,6 +14,7 @@ Cette application mobile permet d'avoir une liste de films/series basé sur The 
 
 Dans cette application, il faut avoir un compte The Movie Db pour y accèder.
 Il a as 2 sections: une liste de film/serie et une de compte avoir les favories.
+
 <img src="./imagesDocumentation/listFilm.jpg" height="300px">
 
 ### Différentes pages
@@ -33,7 +34,6 @@ Dans la page de login, il est possible:
 </div>
 
 * _Avoir une liste de films et de series avec des filtres._
-* _._
 * _Avoir un détails d'un film._
 * _Filtrer selon les plus populaire,les mieux notés,les dernières sorties._
 * _Mettre en favorie un film/serie
@@ -44,7 +44,6 @@ Dans la page de login, il est possible:
 
 * _Avoir son nom d'utilisateur_
 * _ Avoir sa liste de favorie/serie
-  
 
 
   
