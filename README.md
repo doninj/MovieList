@@ -7,7 +7,7 @@ Cette application mobile permet d'avoir une liste de films/series basé sur The 
 
 * Allez sur le github: https://github.com/doninj/MovieList
 * faite un **git clone** pour récuperer le dossier de l'application.
-* Faites dans le projet:  ``` npm install ``
+* Faites dans le projet:  ``` npm install ```
 * Faites un ```yarn android ``` pour lancer le projet.
 **Ou** Allez sur : https://expo.io/@doninj/projects/MovieList et scanner le qr code. 
 ## Fonctionnement de l'application:
